@@ -10,7 +10,7 @@
 package cmd
 
 import (
-	"github.com/sebastienboisard/tamago/back"
+	"github.com/SebastienBoisard/tamago/back"
 	"github.com/spf13/cobra"
 )
 

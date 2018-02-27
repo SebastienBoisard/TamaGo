@@ -11,7 +11,7 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/sebastienboisard/tamago"
+	"github.com/SebastienBoisard/tamago"
 	"github.com/spf13/cobra"
 )
 
