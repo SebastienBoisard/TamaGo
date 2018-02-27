@@ -1,0 +1,58 @@
+{{ template "header.html" .}}
+
+<h1>TamaGo</h1>
+
+<a href="/">Back to the homepage</a><br/><br/>
+
+<div>
+
+    Tags : <input type="text"/><br/><br/>
+    <textarea id="content" cols="120" rows="20"></textarea><br/>
+
+    <input type="submit" value="save" onclick="saveNote()">
+</div>
+
+
+<script src="/js/simple-jsonrpc.js"></script>
+<script>
+    //configure
+    var jrpc = new simple_jsonrpc();
+    var socket = new WebSocket("ws://localhost:7000/ws");
+
+
+    socket.onmessage = function(event) {
+        jrpc.messageHandler(event.data);
+    };
+
+    jrpc.toStream = function(_msg){
+        socket.send(_msg);
+    };
+
+    socket.onerror = function(error) {
+        console.error("Error: " + error.message);
+    };
+
+    socket.onclose = function(event) {
+        if (event.wasClean) {
+            console.info('Connection close was clean');
+        } else {
+            console.error('Connection suddenly close');
+        }
+        console.info('close code : ' + event.code + ' reason: ' + event.reason);
+    };
+
+    function saveNote() {
+        var content = document.getElementById("content");
+        console.log(content.value);
+
+        jrpc.call('NoteManager.AddNote',[{"content":content.value}]).then(function (result) {
+            console.log("result =", result);
+            console.log("note saved");
+            alert("Note saved!")
+            window.location.replace("/");
+        });
+
+    }
+</script>
+
+{{ template "footer.html" .}}

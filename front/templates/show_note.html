@@ -1,0 +1,59 @@
+{{ template "header.html" .}}
+
+<h1>TamaGo</h1>
+
+<a href="/">Back to the homepage</a><br/><br/>
+
+<div>
+
+    Tags : <input id="note_tags" type="text"/><br/><br/>
+    <textarea id="note_content" cols="120" rows="20"></textarea><br/>
+</div>
+
+
+
+<script src="/js/simple-jsonrpc.js"></script>
+<script>
+    //configure
+    var jrpc = new simple_jsonrpc();
+    var socket = new WebSocket("ws://localhost:7000/ws");
+
+
+    socket.onmessage = function(event) {
+        jrpc.messageHandler(event.data);
+    };
+
+    jrpc.toStream = function(_msg){
+        socket.send(_msg);
+    };
+
+    socket.onerror = function(error) {
+        console.error("Error: " + error.message);
+    };
+
+    socket.onclose = function(event) {
+        if (event.wasClean) {
+            console.info('Connection close was clean');
+        } else {
+            console.error('Connection suddenly close');
+        }
+        console.info('close code : ' + event.code + ' reason: ' + event.reason);
+    };
+
+    socket.onopen = function(){
+        jrpc.call('NoteManager.GetNote',[{"id": {{ .note_id }}}]).then(function (result) {
+            console.log("result=", result);
+
+            var note_tags = document.getElementById("note_tags");
+            for (var i=0; i<result['tags'].length; i++) {
+                note_tags.value = note_tags.value+", "+result['tags'][i]['label'];
+            }
+
+            var note_content = document.getElementById("note_content");
+            note_content.value = result['content'];
+        });
+
+    }
+</script>
+
+{{ template "footer.html" .}}

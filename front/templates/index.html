@@ -1,0 +1,120 @@
+{{ template "header.html" .}}
+
+<h1>TamaGo</h1>
+
+<div>
+    <input id="query" type="text"> <button id="find_button" onclick="findNote();">Find</button> &nbsp; &nbsp; &nbsp;
+    <a href="/add_note"><button>Add Note</button></a>
+</div>
+
+<br/><br/>
+
+List of the notes:<br/>
+<div>
+    <table>
+        <thead>
+            <th>Date</th><th>Tags</th><th>Content</th>
+        </thead>
+        <tbody id="note_list">
+
+        </tbody>
+    </table>
+</div>
+
+<script src="/js/simple-jsonrpc.js"></script>
+<script>
+
+    // A little trick to submit a query by pressing the "enter" key.
+    document.getElementById("query")
+            .addEventListener("keyup", function(event) {
+                event.preventDefault();
+                if (event.keyCode === 13) {
+                    document.getElementById("find_button").click();
+                }
+            });
+
+    function convertUnixTimestamp(unixTimestamp)
+    {
+        var a = new Date(unixTimestamp * 1000);
+        var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        var year = a.getFullYear();
+        var month = months[a.getMonth()];
+        var date = a.getDate();
+        var hour = a.getHours();
+        var min =  a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes();
+        var sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds();
+        var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
+        return time;
+    }
+
+    //configure
+    var jrpc = new simple_jsonrpc();
+    var socket = new WebSocket("ws://localhost:7000/ws");
+
+
+    socket.onmessage = function(event) {
+        jrpc.messageHandler(event.data);
+    };
+
+    jrpc.toStream = function(_msg){
+        socket.send(_msg);
+    };
+
+    socket.onerror = function(error) {
+        console.error("Error: " + error.message);
+    };
+
+    socket.onclose = function(event) {
+        if (event.wasClean) {
+            console.info('Connection close was clean');
+        } else {
+            console.error('Connection suddenly close');
+        }
+        console.info('close code : ' + event.code + ' reason: ' + event.reason);
+    };
+
+    //usage
+    //after connect
+    socket.onopen = function(){
+        findNote();
+    };
+
+    function findNote() {
+        var query = document.getElementById("query").value;
+        console.log("query=", query);
+
+        var table_body = document.getElementById("note_list");
+        while (table_body.firstChild) {
+            table_body.removeChild(table_body.firstChild);
+        }
+
+        jrpc.call('NoteManager.FindNotes',[{"query":query}]).then(function (result) {
+            console.log("result=", result);
+            for (var i = 0; i < result.length; i++) {
+                var note_row = document.createElement("tr");
+
+                var column = document.createElement("td");
+                var anchor =  document.createElement("a");
+                anchor.href = "/show_note/"+result[i]['id'];
+                var note_date = document.createTextNode(convertUnixTimestamp(result[i]['timestamp']));
+                anchor.appendChild(note_date);
+                column.appendChild(anchor);
+                note_row.appendChild(column);
+
+                var column = document.createElement("td");
+                var note_tags = document.createTextNode(result[i]['tags'][0]['label']);
+                column.appendChild(note_tags);
+                note_row.appendChild(column);
+
+                var column = document.createElement("td");
+                var note_content = document.createTextNode(result[i]['content']);
+                column.appendChild(note_content);
+                note_row.appendChild(column);
+
+                table_body.appendChild(note_row);
+            }
+        });
+    }
+</script>
+
+{{ template "footer.html" .}}
