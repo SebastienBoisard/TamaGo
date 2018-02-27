@@ -1,3 +1,4 @@
+// Package back provides the back-end server: an access to several RPC for storing and retrieving notes from MongoDB.
 ///////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 2018 - Sébastien Boisard.
 // All rights reserved.
@@ -11,16 +12,18 @@ package back
 
 import (
 	"golang.org/x/net/websocket"
+	"gopkg.in/mgo.v2"
 	"log"
 	"net/http"
 	"net/rpc"
 	"net/rpc/jsonrpc"
-	"gopkg.in/mgo.v2"
 )
 
+// Run prepares the MongoDB session, and runs the websocket handler through which the remote procedure calls will
+// be received.
 func Run() {
 
-	nm := new(NoteManager)
+	nm := new(noteManager)
 
 	session, err := mgo.Dial("localhost:27017")
 	if err != nil {
@@ -32,7 +35,7 @@ func Run() {
 	// All reads happen through this connection. When a write happens, the client drops the connection and connects
 	// to the primary node, and then performs the write. Reads following a write are performed from the primary node.
 	// Cf. https://stackoverflow.com/questions/38572332/compare-consistency-models-used-in-mgo
-    // Cf. http://docs.mongodb.org/manual/reference/read-preference/
+	// Cf. http://docs.mongodb.org/manual/reference/read-preference/
 	session.SetMode(mgo.Monotonic, true)
 
 	// Create an index on the note content to allow query.
@@ -45,9 +48,8 @@ func Run() {
 		log.Fatalf("Error while initializing the database (err=%s)", err)
 	}
 
-	// Store the MongoDB session in the NoteManager
+	// Store the MongoDB session in the noteManager
 	nm.db = session
-
 
 	rpc.Register(nm)
 

@@ -15,6 +15,9 @@ import (
 	"os"
 )
 
+// AppVersion contains the current version number of the project
+const AppVersion = "0.0.1"
+
 func main() {
 
 	err := cmd.RootCmd.Execute()

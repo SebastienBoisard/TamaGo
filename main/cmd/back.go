@@ -1,3 +1,4 @@
+// Package cmd manages the CLI interactions
 ///////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 2018 - Sébastien Boisard.
 // All rights reserved.

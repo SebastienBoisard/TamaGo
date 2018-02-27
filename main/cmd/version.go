@@ -1,3 +1,4 @@
+// Package cmd manages the CLI interactions
 ///////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 2018 - Sébastien Boisard.
 // All rights reserved.
@@ -24,6 +25,6 @@ var versionCmd = &cobra.Command{
 	Short: "Print the version number of tamago",
 	Long:  `All software has versions. This is tamago's`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("Tamago version %s\n", tamago.TamaGoVersion)
+		fmt.Printf("Tamago version %s\n", tamago.AppVersion)
 	},
 }

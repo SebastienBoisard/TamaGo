@@ -1,3 +1,4 @@
+// Package front provides a web server displaying the front-end of TamaGo.
 ///////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 2018 - Sébastien Boisard.
 // All rights reserved.
@@ -63,6 +64,7 @@ func manageShowNote(c *gin.Context) {
 	)
 }
 
+// Run launches and runs the front server.
 func Run() {
 
 	// Instantiate a new router

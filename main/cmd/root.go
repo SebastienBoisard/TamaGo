@@ -1,3 +1,4 @@
+// Package cmd manages the CLI interactions
 ///////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 2018 - Sébastien Boisard.
 // All rights reserved.
@@ -13,6 +14,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// RootCmd is the main command of the CLI
 var RootCmd = &cobra.Command{
 	Use:   "tamago",
 	Short: "tamago is a simple note taking system",

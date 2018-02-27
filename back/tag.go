@@ -1,3 +1,4 @@
+// Package back provides the back-end server: an access to several RPC for storing and retrieving notes from MongoDB.
 ///////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 2018 - Sébastien Boisard.
 // All rights reserved.
@@ -9,7 +10,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 package back
 
-
+// Tag contains all the data of a tag
 type Tag struct {
 	Label string `json:"label" bson:"label"`
 }

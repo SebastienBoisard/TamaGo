@@ -1,3 +1,4 @@
+// Package tamago ...
 ///////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 2018 - Sébastien Boisard.
 // All rights reserved.
@@ -9,5 +10,5 @@
 ///////////////////////////////////////////////////////////////////////////////
 package tamago
 
-// TamaGoVersion contains the current version number of the project
-const TamaGoVersion = "0.0.1"
+// AppVersion contains the current version number of the project
+const AppVersion = "0.0.1"

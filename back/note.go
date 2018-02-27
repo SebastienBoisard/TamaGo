@@ -1,3 +1,4 @@
+// Package back provides the back-end server: an access to several RPC for storing and retrieving notes from MongoDB.
 ///////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 2018 - Sébastien Boisard.
 // All rights reserved.
@@ -16,7 +17,7 @@ import (
 	"time"
 )
 
-
+// Note describes the different data of a note
 type Note struct {
 	ID        bson.ObjectId `json:"id"        bson:"_id"`
 	Timestamp int64         `json:"timestamp" bson:"timestamp"`
@@ -42,4 +43,3 @@ func (n *Note) String() string {
 
 	return buf.String()
 }
-

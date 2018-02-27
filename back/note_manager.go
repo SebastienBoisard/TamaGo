@@ -1,3 +1,4 @@
+// Package back provides the back-end server: an access to several RPC for storing and retrieving notes from MongoDB.
 ///////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 2018 - Sébastien Boisard.
 // All rights reserved.
@@ -17,12 +18,12 @@ import (
 	"time"
 )
 
-type NoteManager struct {
+type noteManager struct {
 	db *mgo.Session
 }
 
 // AddNote adds a note.
-func (nm *NoteManager) AddNote(args *Note, reply *int) error {
+func (nm *noteManager) AddNote(args *Note, reply *int) error {
 
 	log.Printf("AddNote BEGIN")
 	log.Printf("AddNote - args=%+v", args)
@@ -49,7 +50,7 @@ func (nm *NoteManager) AddNote(args *Note, reply *int) error {
 }
 
 // GetNote retrieves a not from its id.
-func (nm *NoteManager) GetNote(noteID *IDArgs, reply *Note) error {
+func (nm *noteManager) GetNote(noteID *IDArgs, reply *Note) error {
 
 	log.Printf("GetNote BEGIN")
 	log.Printf("GetNote - noteID.ID=%s\n", noteID.ID.Hex())
@@ -76,7 +77,7 @@ func (nm *NoteManager) GetNote(noteID *IDArgs, reply *Note) error {
 
 // FindNotes retrieves all the notes matching the query.
 // If the query is empty, it will return all the notes.
-func (nm *NoteManager) FindNotes(query *QueryArgs, reply *[]Note) error {
+func (nm *noteManager) FindNotes(query *QueryArgs, reply *[]Note) error {
 
 	log.Printf("FindNotes BEGIN")
 	log.Printf("FindNotes - query=%+s", query.Query)
