@@ -7,7 +7,7 @@
 //
 // Author: Sébastien Boisard (sebastien.boisard@gmail.com)
 ///////////////////////////////////////////////////////////////////////////////
-package TamaGo
+package tamago
 
 // TamaGoVersion contains the current version number of the project
 const TamaGoVersion = "0.0.1"

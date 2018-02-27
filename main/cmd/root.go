@@ -14,9 +14,9 @@ import (
 )
 
 var RootCmd = &cobra.Command{
-	Use:   "TamaGo",
-	Short: "TamaGo is a simple note taking system",
-	Long:  `TamaGo is a simple note taking system built by Sébastien Boisard`,
+	Use:   "tamago",
+	Short: "tamago is a simple note taking system",
+	Long:  `tamago is a simple note taking system built by Sébastien Boisard`,
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		// @todo: to fill

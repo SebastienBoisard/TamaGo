@@ -11,7 +11,7 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/sebastienboisard/TamaGo"
+	"github.com/sebastienboisard/tamago"
 	"github.com/spf13/cobra"
 )
 
@@ -21,9 +21,9 @@ func init() {
 
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "Print the version number of TamaGo",
-	Long:  `All software has versions. This is TamaGo's`,
+	Short: "Print the version number of tamago",
+	Long:  `All software has versions. This is tamago's`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("Tamago version %s\n", TamaGo.TamaGoVersion)
+		fmt.Printf("Tamago version %s\n", tamago.TamaGoVersion)
 	},
 }

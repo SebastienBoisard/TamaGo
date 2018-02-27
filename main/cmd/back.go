@@ -10,7 +10,7 @@
 package cmd
 
 import (
-	"github.com/sebastienboisard/TamaGo/back"
+	"github.com/sebastienboisard/tamago/back"
 	"github.com/spf13/cobra"
 )
 
@@ -20,8 +20,8 @@ func init() {
 
 var backCmd = &cobra.Command{
 	Use:   "back",
-	Short: "Run the back server of TamaGo",
-	Long:  `Run the back server (i.e. the json-rpc server) of TamaGo`,
+	Short: "Run the back server of tamago",
+	Long:  `Run the back server (i.e. the json-rpc server) of tamago`,
 	Args:  cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		back.Run()

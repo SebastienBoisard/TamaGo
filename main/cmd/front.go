@@ -10,7 +10,7 @@
 package cmd
 
 import (
-	"github.com/sebastienboisard/TamaGo/front"
+	"github.com/sebastienboisard/tamago/front"
 	"github.com/spf13/cobra"
 )
 
@@ -20,8 +20,8 @@ func init() {
 
 var frontCmd = &cobra.Command{
 	Use:   "front",
-	Short: "Run the front server of TamaGo",
-	Long:  `Run the front server (i.e. the webserver) of TamaGo`,
+	Short: "Run the front server of tamago",
+	Long:  `Run the front server (i.e. the webserver) of tamago`,
 	Args:  cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		front.Run()

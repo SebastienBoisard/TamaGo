@@ -11,7 +11,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/sebastienboisard/TamaGo/main/cmd"
+	"github.com/sebastienboisard/tamago/main/cmd"
 	"os"
 )
 
