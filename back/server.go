@@ -23,7 +23,7 @@ import (
 // be received.
 func Run() {
 
-	nm := new(noteManager)
+	nm := new(NoteManager)
 
 	session, err := mgo.Dial("localhost:27017")
 	if err != nil {
@@ -48,7 +48,7 @@ func Run() {
 		log.Fatalf("Error while initializing the database (err=%s)", err)
 	}
 
-	// Store the MongoDB session in the noteManager
+	// Store the MongoDB session in the NoteManager
 	nm.db = session
 
 	rpc.Register(nm)

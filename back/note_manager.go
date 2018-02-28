@@ -18,12 +18,13 @@ import (
 	"time"
 )
 
-type noteManager struct {
+// NoteManager is the object for accessing all the remote procedures.
+type NoteManager struct {
 	db *mgo.Session
 }
 
 // AddNote adds a note.
-func (nm *noteManager) AddNote(args *Note, reply *int) error {
+func (nm *NoteManager) AddNote(args *Note, reply *int) error {
 
 	log.Printf("AddNote BEGIN")
 	log.Printf("AddNote - args=%+v", args)
@@ -50,7 +51,7 @@ func (nm *noteManager) AddNote(args *Note, reply *int) error {
 }
 
 // GetNote retrieves a not from its id.
-func (nm *noteManager) GetNote(noteID *IDArgs, reply *Note) error {
+func (nm *NoteManager) GetNote(noteID *IDArgs, reply *Note) error {
 
 	log.Printf("GetNote BEGIN")
 	log.Printf("GetNote - noteID.ID=%s\n", noteID.ID.Hex())
@@ -77,7 +78,7 @@ func (nm *noteManager) GetNote(noteID *IDArgs, reply *Note) error {
 
 // FindNotes retrieves all the notes matching the query.
 // If the query is empty, it will return all the notes.
-func (nm *noteManager) FindNotes(query *QueryArgs, reply *[]Note) error {
+func (nm *NoteManager) FindNotes(query *QueryArgs, reply *[]Note) error {
 
 	log.Printf("FindNotes BEGIN")
 	log.Printf("FindNotes - query=%+s", query.Query)
