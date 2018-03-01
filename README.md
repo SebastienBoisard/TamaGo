@@ -19,9 +19,12 @@ The goal of this experimental project is to discover and use different tools wit
 ## Architecture
 
 TamaGo is structured in 2 servers: 
-  - a front server: a simple webserver based on Gin, which calls remote procedures through a websocket with a 
-  Javascript library called "[Simple JsonRPC](https://github.com/jershell/simple-jsonrpc-js)"
+  - a front server: a simple web server based on Gin, which serves pages for listing all the notes and for displaying 
+  and adding notes. Each page communicates with the back server by calling remote procedures through a websocket thanks 
+  to a Javascript library called "[Simple JsonRPC](https://github.com/jershell/simple-jsonrpc-js)"
   - a back server: a small RPC server, which stores an retrieves notes from a MongoDB database.
+  
+To install MongoDB, you can use this [short tutorial](https://github.com/SebastienBoisard/tamago/blob/master/mongodb.md).
   
 ## Build
 
@@ -46,7 +49,7 @@ tamago back
 
   - Create a web design
   - Add several actions (delete and update a note for example)
-  - Add unit tests
+  - Add unit tests (and create a mock for MongoDB)
 
   
   
