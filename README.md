@@ -12,7 +12,8 @@ The goal of this experimental project is to discover and use different tools wit
   - [Gin](https://github.com/gin-gonic/gin), a HTTP web framework written in Go
   - [Dep](https://github.com/golang/dep), Go dependency management tool 
   - [Cobra](https://github.com/spf13/cobra), a Commander for modern Go CLI interactions
-  - [Jsonrpc](https://golang.org/pkg/net/rpc/jsonrpc/), a light weight remote procedure call protocol library implementation in Go 
+  - [Jsonrpc](https://golang.org/pkg/net/rpc/jsonrpc/), a light weight remote procedure call protocol library 
+  implementation written in Go 
 
 
 ## Architecture

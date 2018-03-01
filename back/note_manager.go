@@ -23,8 +23,8 @@ type NoteManager struct {
 	db *mgo.Session
 }
 
-// AddNote adds a note.
-func (nm *NoteManager) AddNote(args *Note, reply *int) error {
+// AddNote adds a note, and returns the id of the new note.
+func (nm *NoteManager) AddNote(args *Note, reply *string) error {
 
 	log.Printf("AddNote BEGIN")
 	log.Printf("AddNote - args=%+v", args)
@@ -39,22 +39,24 @@ func (nm *NoteManager) AddNote(args *Note, reply *int) error {
 	c := dbsession.DB("tamago").C("notes")
 
 	now := time.Now()
-	err := c.Insert(&Note{bson.NewObjectId(), now.Unix(), []*Tag{{"go"}}, args.Content})
+	ID := bson.NewObjectId()
+	err := c.Insert(&Note{ID, now.Unix(), args.Tags, args.Content})
 	if err != nil {
 		log.Printf("AddNote - Error while adding a note [err=%s]", err)
 		log.Printf("AddNote END")
 		return err
 	}
 
+	*reply = ID.Hex()
 	log.Printf("AddNote END")
 	return nil
 }
 
-// GetNote retrieves a not from its id.
-func (nm *NoteManager) GetNote(noteID *IDArgs, reply *Note) error {
+// GetNote retrieves a note from its id.
+func (nm *NoteManager) GetNote(noteID *string, reply *Note) error {
 
 	log.Printf("GetNote BEGIN")
-	log.Printf("GetNote - noteID.ID=%s\n", noteID.ID.Hex())
+	log.Printf("GetNote - noteID.ID=%s\n", *noteID)
 
 	dbsession := nm.db.Copy()
 	defer dbsession.Close()
@@ -62,10 +64,10 @@ func (nm *NoteManager) GetNote(noteID *IDArgs, reply *Note) error {
 	// We work on the "notes" collection
 	c := dbsession.DB("tamago").C("notes")
 
-	// Find the wanted note with the proper ID
-	err := c.FindId(noteID.ID).One(reply)
+	// Find the requested note with the proper ID
+	err := c.FindId(bson.ObjectIdHex(*noteID)).One(reply)
 	if err != nil {
-		log.Printf("GetNote - Error while retreiving a note (id=%s) [err=%s]", noteID.ID.Hex(), err)
+		log.Printf("GetNote - Error while retreiving a note (id=%s) [err=%s]", *noteID, err)
 		log.Printf("GetNote END")
 		return err
 	}
@@ -78,10 +80,10 @@ func (nm *NoteManager) GetNote(noteID *IDArgs, reply *Note) error {
 
 // FindNotes retrieves all the notes matching the query.
 // If the query is empty, it will return all the notes.
-func (nm *NoteManager) FindNotes(query *QueryArgs, reply *[]Note) error {
+func (nm *NoteManager) FindNotes(query *string, reply *[]Note) error {
 
 	log.Printf("FindNotes BEGIN")
-	log.Printf("FindNotes - query=%+s", query.Query)
+	log.Printf("FindNotes - query=%s", *query)
 
 	dbsession := nm.db.Copy()
 	defer dbsession.Close()
@@ -90,14 +92,14 @@ func (nm *NoteManager) FindNotes(query *QueryArgs, reply *[]Note) error {
 	c := dbsession.DB("tamago").C("notes")
 
 	var q *mgo.Query
-	if query.Query == "" {
+	if *query == "" {
 
 		// Query all notes
 		q = c.Find(nil)
 	} else {
 
 		// Query all the notes matching the query
-		q = c.Find(bson.M{"$text": bson.M{"$search": query.Query}})
+		q = c.Find(bson.M{"$text": bson.M{"$search": *query}})
 	}
 
 	// Retrieve notes and sort them on the timestamp

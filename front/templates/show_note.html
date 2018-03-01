@@ -41,12 +41,16 @@
     };
 
     socket.onopen = function(){
-        jrpc.call('NoteManager.GetNote',[{"id": {{ .note_id }}}]).then(function (result) {
+        jrpc.call('NoteManager.GetNote', [{{ .note_id }}]).then(function (result) {
+        jrpc.call('NoteManager.GetNote', [{{ .note_id }}]).then(function (result) {
             console.log("result=", result);
 
             var note_tags = document.getElementById("note_tags");
-            for (var i=0; i<result['tags'].length; i++) {
-                note_tags.value = note_tags.value+", "+result['tags'][i]['label'];
+            if (result['tags'].length > 0) {
+                note_tags.value = result['tags'][0]['label'];
+            }
+            for (var i=1; i<result['tags'].length; i++) {
+                note_tags.value += ", "+result['tags'][i]['label'];
             }
 
             var note_content = document.getElementById("note_content");

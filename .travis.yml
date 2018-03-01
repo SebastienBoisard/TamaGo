@@ -8,7 +8,6 @@ env:
 
 install:
   - dep ensure
-  - make
 
 before_install:
   # Download the binary to bin folder in $GOPATH

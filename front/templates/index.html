@@ -81,14 +81,13 @@ List of the notes:<br/>
 
     function findNote() {
         var query = document.getElementById("query").value;
-        console.log("query=", query);
 
         var table_body = document.getElementById("note_list");
         while (table_body.firstChild) {
             table_body.removeChild(table_body.firstChild);
         }
 
-        jrpc.call('NoteManager.FindNotes',[{"query":query}]).then(function (result) {
+        jrpc.call('NoteManager.FindNotes',[query]).then(function (result) {
             console.log("result=", result);
             for (var i = 0; i < result.length; i++) {
                 var note_row = document.createElement("tr");
@@ -101,12 +100,20 @@ List of the notes:<br/>
                 column.appendChild(anchor);
                 note_row.appendChild(column);
 
-                var column = document.createElement("td");
-                var note_tags = document.createTextNode(result[i]['tags'][0]['label']);
+                column = document.createElement("td");
+                var tags = result[i]['tags'];
+                var tags_labels = '';
+                for (var j=0; j<tags.length; j++) {
+                    tags_labels += tags[j]['label'];
+                    if (j < tags.length-1) {
+                        tags_labels += ',';
+                    }
+                }
+                var note_tags = document.createTextNode(tags_labels);
                 column.appendChild(note_tags);
                 note_row.appendChild(column);
 
-                var column = document.createElement("td");
+                column = document.createElement("td");
                 var note_content = document.createTextNode(result[i]['content']);
                 column.appendChild(note_content);
                 note_row.appendChild(column);

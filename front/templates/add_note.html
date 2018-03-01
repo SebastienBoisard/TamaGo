@@ -6,7 +6,7 @@
 
 <div>
 
-    Tags : <input type="text"/><br/><br/>
+    Tags : <input id="tags" type="text"/><br/><br/>
     <textarea id="content" cols="120" rows="20"></textarea><br/>
 
     <input type="submit" value="save" onclick="saveNote()">
@@ -43,11 +43,19 @@
 
     function saveNote() {
         var content = document.getElementById("content");
+        var tags = document.getElementById("tags");
         console.log(content.value);
 
-        jrpc.call('NoteManager.AddNote',[{"content":content.value}]).then(function (result) {
-            console.log("result =", result);
-            console.log("note saved");
+        var atags = tags.value.split(",").map(Function.prototype.call, String.prototype.trim);
+
+        var final_tags = [];
+        for (var i=0; i<atags.length; i++) {
+            final_tags.push({"label": atags[i]});
+        }
+
+
+        jrpc.call('NoteManager.AddNote',[{"content":content.value, "tags":final_tags}]).then(function (result) {
+            console.log("id of the new note: ", result);
             alert("Note saved!")
             window.location.replace("/");
         });
